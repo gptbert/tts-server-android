@@ -8,6 +8,6 @@
 .cxx
 local.properties
 
-*.jks
+key.jks
 key.jks.base64.txt
 
