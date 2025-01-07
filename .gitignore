@@ -9,4 +9,5 @@
 local.properties
 
 *.jks
+key.jks.base64.txt
 
