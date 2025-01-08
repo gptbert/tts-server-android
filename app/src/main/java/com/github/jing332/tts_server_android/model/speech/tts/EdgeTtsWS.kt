@@ -29,7 +29,7 @@ class EdgeTtsWS : WebSocketListener() {
         const val TAG = "EdgeTtsWS"
 
         private const val wssUrl =
-            "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId="
+            "wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1"
 
         private val simpleDateFormat by lazy {
             SimpleDateFormat(
@@ -53,7 +53,7 @@ class EdgeTtsWS : WebSocketListener() {
     }
 
     private suspend fun connectSync(): Boolean = withIO {
-        val req = Request.Builder().url(wssUrl + uuid).apply {
+        val req = Request.Builder().url(buildWssUrl()).apply {
             header("Accept-Encoding", "gzip, deflate, br")
             header("Origin", "chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold")
             header(
@@ -174,6 +174,14 @@ class EdgeTtsWS : WebSocketListener() {
     private fun xmlEscape(s: String): String {
         return s.replace("'", "&apos;").replace("\"", "&quot;").replace("<", "&lt;")
             .replace(">", "&gt;").replace("&", "&amp;").replace("/", "").replace("\\", "")
+    }
+
+    private fun buildWssUrl(): String {
+        val connectionId = UUID.fastUUID().toString()
+        return "$wssUrl?TrustedClientToken=${EdgeTtsDrm.getTrustedClientToken()}" +
+                "&Sec-MS-GEC=${EdgeTtsDrm.generateSecMsGec()}" +
+                "&Sec-MS-GEC-Version=${EdgeTtsDrm.generateSecMsGecVersion()}" +
+                "&ConnectionId=$connectionId"
     }
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
