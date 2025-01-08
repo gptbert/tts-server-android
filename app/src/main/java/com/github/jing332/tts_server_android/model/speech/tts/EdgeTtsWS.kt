@@ -55,10 +55,13 @@ class EdgeTtsWS : WebSocketListener() {
     private suspend fun connectSync(): Boolean = withIO {
         val req = Request.Builder().url(buildWssUrl()).apply {
             header("Accept-Encoding", "gzip, deflate, br")
+            header("Accept-Language", "en-US,en;q=0.9")
+            header("Cache-Control", "no-cache")
             header("Origin", "chrome-extension://jdiccldimpdaibmpdkjnbmckianbfold")
+            header("Pragma", "no-cache")
             header(
                 "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.66 Safari/537.36 Edg/103.0.1264.44"
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0"
             )
         }.build()
 
